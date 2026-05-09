@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>习惯打卡 - 健康生活助手 🌈</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin:0;
+            padding:0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Nunito', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #a18cd1 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            box-shadow: 0 4px 20px rgba(255, 182, 193, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #ff6b9d, #c93cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .brand i {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ff6b9d, #ffa751);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .nav-link {
+            padding: 8px 16px;
+            color: #666;
+            text-decoration: none;
+            border-radius: 15px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 107, 157, 0.1);
+            color: #ff6b9d;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: #ff6b9d;
+            font-size: 1.1rem;
+        }
+        
+        .logout-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ff6b9d, #ff4757);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+        }
+        
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 157, 0.6);
+        }
+        
+        /* 主内容 */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #ff9a9e 100%);
+            padding: 40px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(255, 154, 158, 0.3);
+            text-align: center;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #ff6b9d;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        /* 习惯卡片网格 */
+        .habits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .habit-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(255, 182, 193, 0.2);
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid transparent;
+        }
+        
+        .habit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6b9d, #ffa751, #c93cff);
+        }
+        
+        .habit-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 50px rgba(255, 107, 157, 0.4);
+            border-color: #ff6b9d;
+        }
+        
+        .habit-card:active {
+            transform: scale(0.98);
+        }
+        
+        .habit-icon-wrapper {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 20px;
+        }
+        
+        .habit-icon {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff4757 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.2rem;
+            transition: all 0.5s;
+            box-shadow: 0 5px 20px rgba(255, 107, 157, 0.4);
+        }
+        
+        .habit-card:nth-child(2) .habit-icon {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .habit-card:nth-child(3) .habit-icon {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .habit-card:nth-child(4) .habit-icon {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        .habit-card:nth-child(5) .habit-icon {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .habit-card:hover .habit-icon {
+            transform: rotate(360deg) scale(1.1);
+        }
+        
+        .habit-check {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 35px;
+            height: 35px;
+            background: #4caf50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.4s;
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.4);
+        }
+        
+        .habit-card.checked .habit-check {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .habit-card h3 {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .habit-card p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .habit-streak {
+            color: #ff6b9d;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .habit-streak i {
+            margin-right: 5px;
+        }
+        
+        .habit-status {
+            padding: 8px 20px;
+            background: #ffe0e6;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #ff6b9d;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .habit-card.checked .habit-status {
+            background: #4caf50;
+            color: white;
+        }
+        
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #ff6b9d, #ff4757);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+            margin-bottom: 20px;
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 107, 157, 0.6);
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .habits-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="brand">
+            <i class="fas fa-heartbeat"></i>
+            <span>健康生活助手</span>
+        </div>
+        <div class="nav-links">
+            <a href="main-final.html" class="nav-link">🏠 首页</a>
+            <a href="plan.html" class="nav-link">📋 计划</a>
+            <a href="habits.html" class="nav-link active">✅ 打卡</a>
+            <a href="data.html" class="nav-link">📊 数据</a>
+            <a href="videos.html" class="nav-link">🎬 视频</a>
+        </div>
+        <div class="user-info">
+            <span class="user-name" id="user-name">用户</span>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> 退出
+            </button>
+        </div>
+    </nav>
+    
+    <!-- 主内容 -->
+    <div class="main-content">
+        <a href="main-final.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> 返回首页
+        </a>
+        
+        <!-- 页面标题 -->
+        <div class="page-header">
+            <h1>✅ 习惯打卡 🌈</h1>
+            <p>每日健康习惯打卡，建立稳定的健康生活方式</p>
+            <p style="margin-top: 10px; font-size: 1rem; color: #999;">💡 点击卡片即可完成打卡哦~</p>
+        </div>
+        
+        <!-- 习惯卡片网格 -->
+        <div class="habits-grid">
+            <!-- 早睡习惯 -->
+            <div class="habit-card" data-habit="sleep" onclick="checkHabit('sleep')">
+                <div class="habit-icon-wrapper">
+                    <div class="habit-icon">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="habit-check">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+                <h3>早睡习惯 🌙</h3>
+                <p>每天23:00前入睡</p>
+                <div class="habit-streak">
+                    <i class="fas fa-fire"></i> 连续 <span id="sleep-streak">0</span> 天
+                </div>
+                <div class="habit-status" id="sleep-status">未打卡</div>
+            </div>
+            
+            <!-- 早起习惯 -->
+            <div class="habit-card" data-habit="wake" onclick="checkHabit('wake')">
+                <div class="habit-icon-wrapper">
+                    <div class="habit-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <div class="habit-check">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+                <h3>早起习惯 ☀️</h3>
+                <p>每天7:00-8:00起床</p>
+                <div class="habit-streak">
+                    <i class="fas fa-fire"></i> 连续 <span id="wake-streak">0</span> 天
+                </div>
+                <div class="habit-status" id="wake-status">未打卡</div>
+            </div>
+            
+            <!-- 锻炼习惯 -->
+            <div class="habit-card" data-habit="exercise" onclick="checkHabit('exercise')">
+                <div class="habit-icon-wrapper">
+                    <div class="habit-icon">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <div class="habit-check">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+                <h3>锻炼习惯 🏃</h3>
+                <p>每天运动20-30分钟</p>
+                <div class="habit-streak">
+                    <i class="fas fa-fire"></i> 连续 <span id="exercise-streak">0</span> 天
+                </div>
+                <div class="habit-status" id="exercise-status">未打卡</div>
+            </div>
+            
+            <!-- 喝水习惯 -->
+            <div class="habit-card" data-habit="water" onclick="checkHabit('water')">
+                <div class="habit-icon-wrapper">
+                    <div class="habit-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="habit-check">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+                <h3>喝水习惯 💧</h3>
+                <p>每天喝够8杯水</p>
+                <div class="habit-streak">
+                    <i class="fas fa-fire"></i> 连续 <span id="water-streak">0</span> 天
+                </div>
+                <div class="habit-status" id="water-status">未打卡</div>
+            </div>
+            
+            <!-- 健康饮食习惯 -->
+            <div class="habit-card" data-habit="diet" onclick="checkHabit('diet')">
+                <div class="habit-icon-wrapper">
+                    <div class="habit-icon">
+                        <i class="fas fa-apple-alt"></i>
+                    </div>
+                    <div class="habit-check">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+                <h3>健康饮食 🍎</h3>
+                <p>均衡三餐，多吃蔬果</p>
+                <div class="habit-streak">
+                    <i class="fas fa-fire"></i> 连续 <span id="diet-streak">0</span> 天
+                </div>
+                <div class="habit-status" id="diet-status">未打卡</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ==================== 全局变量 ====================
+        let currentUser = null;
+        let healthData = {
+            habits: {
+                sleep: { streak: 0, lastCheck: null, checked: false },
+                wake: { streak: 0, lastCheck: null, checked: false },
+                exercise: { streak: 0, lastCheck: null, checked: false },
+                water: { streak: 0, lastCheck: null, todayIntake: 0, checked: false },
+                diet: { streak: 0, lastCheck: null, checked: false }
+            }
+        };
+        
+        // ==================== 初始化 ====================
+        window.addEventListener('load', function() {
+            const savedUser = localStorage.getItem('healthAppCurrentUser');
+            if (!savedUser) {
+                window.location.href = 'login-final.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(savedUser);
+            document.getElementById('user-name').textContent = currentUser.name;
+            
+            loadHealthData();
+            updateDisplay();
+        });
+        
+        // ==================== 登录/登出 ====================
+        function logout() {
+            if (confirm('确定要退出登录吗？ 🤔')) {
+                localStorage.removeItem('healthAppCurrentUser');
+                window.location.href = 'login-final.html';
+            }
+        }
+        
+        // ==================== 健康数据管理 ====================
+        function loadHealthData() {
+            if (currentUser) {
+                const key = `healthAppData_${currentUser.id}`;
+                const savedData = localStorage.getItem(key);
+                if (savedData) {
+                    const parsed = JSON.parse(savedData);
+                    healthData = { ...healthData, ...parsed };
+                }
+            }
+        }
+        
+        function saveHealthData() {
+            if (currentUser) {
+                const key = `healthAppData_${currentUser.id}`;
+                localStorage.setItem(key, JSON.stringify(healthData));
+            }
+        }
+        
+        // ==================== 习惯打卡（修复版）====================
+        function checkHabit(habitType) {
+            if (!currentUser) {
+                alert('请先登录！🔐');
+                return;
+            }
+            
+            const today = new Date().toDateString();
+            
+            // 如果今天已经打卡，则不再重复打卡
+            if (healthData.habits[habitType].lastCheck === today) {
+                alert('今天已经打卡过了！明天再来吧~ 😊');
+                return;
+            }
+            
+            // 更新连续打卡天数
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toDateString();
+            
+            if (healthData.habits[habitType].lastCheck === yesterdayStr) {
+                healthData.habits[habitType].streak++;
+            } else {
+                healthData.habits[habitType].streak = 1;
+            }
+            
+            // 更新最后打卡日期和状态
+            healthData.habits[habitType].lastCheck = today;
+            healthData.habits[habitType].checked = true;
+            
+            // 特殊习惯处理
+            if (habitType === 'water') {
+                // 饮水习惯需要记录饮水量
+                openWaterModal();
+                return;
+            }
+            
+            // 播放打卡动画
+            playCheckAnimation(habitType);
+            
+            // 保存数据并更新显示
+            saveHealthData();
+            updateDisplay();
+            
+            // 显示成功消息
+            alert(`${getHabitName(habitType)}打卡成功！🎉\n连续打卡：${healthData.habits[habitType].streak}天\n继续加油哦~ 💪`);
+            
+            // 更新阶段进度
+            updatePhaseProgress();
+            
+            // 检查是否完成所有今日习惯
+            checkAllHabitsCompleted();
+        }
+        
+        function playCheckAnimation(habitType) {
+            const card = document.querySelector(`[data-habit="${habitType}"]`);
+            const checkIcon = card.querySelector('.habit-check');
+            const statusElement = document.getElementById(`${habitType}-status`);
+            
+            if (card && checkIcon) {
+                card.classList.add('checked');
+                checkIcon.style.opacity = '1';
+                checkIcon.style.transform = 'scale(1)';
+                
+                if (statusElement) {
+                    statusElement.textContent = '已打卡';
+                    statusElement.style.background = '#4caf50';
+                    statusElement.style.color = 'white';
+                }
+            }
+        }
+        
+        function getHabitName(habitType) {
+            const names = {
+                sleep: '早睡习惯',
+                wake: '早起习惯',
+                exercise: '锻炼习惯',
+                water: '喝水习惯',
+                diet: '健康饮食习惯'
+            };
+            return names[habitType] || habitType;
+        }
+        
+        function checkAllHabitsCompleted() {
+            const today = new Date().toDateString();
+            const allHabits = ['sleep', 'wake', 'exercise', 'water', 'diet'];
+            const completedToday = allHabits.filter(h => healthData.habits[h].lastCheck === today).length;
+            
+            if (completedToday === 5) {
+                setTimeout(() => {
+                    alert('🎉 恭喜！今天的所有健康习惯都完成了！太棒了！🌟');
+                }, 500);
+            }
+        }
+        
+        // ==================== 数据记录 ====================
+        function openWaterModal() {
+            document.getElementById('water-modal').classList.add('active');
+        }
+        
+        function closeWaterModal() {
+            document.getElementById('water-modal').classList.remove('active');
+        }
+        
+        function recordWaterData() {
+            const amount = parseInt(document.getElementById('water-amount').value);
+            
+            if (!amount || amount <= 0) {
+                alert('请输入有效的饮水量！💧');
+                return;
+            }
+            
+            healthData.habits.water.todayIntake += amount;
+            saveHealthData();
+            closeWaterModal();
+            
+            // 播放打卡动画
+            playCheckAnimation('water');
+            updateDisplay();
+            
+            alert(`饮水记录成功！💧\n今日饮水量：${healthData.habits.water.todayIntake}杯\n多喝水，身体好~ 💪`);
+            
+            // 更新阶段进度
+            updatePhaseProgress();
+        }
+        
+        // ==================== 阶段进度更新 ====================
+        function updatePhaseProgress() {
+            // 这里可以调用plan.html中的更新逻辑
+            // 为简化，我们直接保存数据
+            saveHealthData();
+        }
+        
+        // ==================== 显示更新 ====================
+        function updateDisplay() {
+            // 更新所有习惯的连续天数和状态
+            for (const habit in healthData.habits) {
+                const streakElement = document.getElementById(`${habit}-streak`);
+                if (streakElement) {
+                    streakElement.textContent = healthData.habits[habit].streak;
+                }
+                
+                // 如果今天已打卡，显示已打卡状态
+                const today = new Date().toDateString();
+                if (healthData.habits[habit].lastCheck === today) {
+                    const card = document.querySelector(`[data-habit="${habit}"]`);
+                    const checkIcon = card.querySelector('.habit-check');
+                    const statusElement = document.getElementById(`${habit}-status`);
+                    
+                    if (card && checkIcon) {
+                        card.classList.add('checked');
+                        checkIcon.style.opacity = '1';
+                        checkIcon.style.transform = 'scale(1)';
+                        
+                        if (statusElement) {
+                            statusElement.textContent = '已打卡';
+                            statusElement.style.background = '#4caf50';
+                            statusElement.style.color = 'white';
+                        }
+                    }
+                }
+            }
+        }
+        
+        console.log('✅ 习惯打卡页面已加载！');
+        console.log('🌈 可爱风格已应用！');
+    </script>
+    
+    <!-- 饮水记录模态框 -->
+    <div id="water-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 40px; border-radius: 30px; max-width: 500px; width: 90%; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+            <span style="position: absolute; top: 15px; right: 20px; font-size: 2.5rem; color: #ff6b9d; cursor: pointer; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #ffe0e6; transition: all 0.3s;" onclick="closeWaterModal()" onmouseover="this.style.background='#ff6b9d'; this.style.color='white';" onmouseout="this.style.background='#ffe0e6'; this.style.color='#ff6b9d';">&times;</span>
+            <h2 style="font-size: 1.8rem; color: #ff6b9d; margin-bottom: 25px; font-weight: 700;"><i class="fas fa-tint"></i> 记录饮水 💧</h2>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 600; font-size: 1.05rem;"><i class="fas fa-glass-water"></i> 饮水量（杯）</label>
+                <input type="number" id="water-amount" min="1" max="8" value="1" style="width: 100%; padding: 12px 15px; border: 3px solid #ffe0e6; border-radius: 15px; font-size: 1rem; transition: all 0.3s; font-family: inherit;" onfocus="this.style.borderColor='#ff6b9d'; this.style.boxShadow='0 0 0 4px rgba(255, 107, 157, 0.2)';" onblur="this.style.borderColor='#ffe0e6'; this.style.boxShadow='none';">
+            </div>
+            <div style="display: flex; gap: 15px; margin-top: 25px;">
+                <button style="flex: 1; padding: 14px; background: linear-gradient(135deg, #ff6b9d, #ff4757); color: white; border: none; border-radius: 15px; cursor: pointer; font-size: 1.1rem; font-weight: 700; transition: all 0.3s; box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4); font-family: inherit;" onclick="recordWaterData()" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 25px rgba(255, 107, 157, 0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(255, 107, 157, 0.4)';">
+                    <i class="fas fa-save"></i> 保存
+                </button>
+                <button style="flex: 1; padding: 14px; background: #f8f9fa; color: #666; border: 3px solid #e9ecef; border-radius: 15px; cursor: pointer; font-size: 1.1rem; font-weight: 700; transition: all 0.3s; font-family: inherit;" onclick="closeWaterModal()" onmouseover="this.style.background='#e9ecef'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#f8f9fa'; this.style.transform='translateY(0)';">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

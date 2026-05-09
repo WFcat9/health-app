@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>健康视频 - 健康生活助手 🌈</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin:0;
+            padding:0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Nunito', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #a18cd1 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            box-shadow: 0 4px 20px rgba(255, 182, 193, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #ff6b9d, #c93cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .brand i {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ff6b9d, #ffa751);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .nav-link {
+            padding: 8px 16px;
+            color: #666;
+            text-decoration: none;
+            border-radius: 15px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 107, 157, 0.1);
+            color: #ff6b9d;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: #ff6b9d;
+            font-size: 1.1rem;
+        }
+        
+        .logout-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ff6b9d, #ff4757);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+        }
+        
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 157, 0.6);
+        }
+        
+        /* 主内容 */
+        .main-content {
+            max-width: 1200px;
+            margin:0 auto;
+            padding: 30px 20px;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #ff9a9e 100%);
+            padding: 40px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(255, 154, 158, 0.3);
+            text-align: center;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #ff6b9d;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        /* 视频分类 */
+        .video-categories {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .category-btn {
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid #ffe0e6;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 700;
+            color: #ff6b9d;
+            font-size: 1rem;
+            font-family: inherit;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+        }
+        
+        .category-btn:hover {
+            border-color: #ff6b9d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+        }
+        
+        .category-btn.active {
+            background: linear-gradient(135deg, #ff6b9d, #ff4757);
+            color: white;
+            border-color: #ff6b9d;
+        }
+        
+        /* 视频网格 */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .video-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(255, 182, 193, 0.2);
+            cursor: pointer;
+            transition: all 0.4s;
+            border: 3px solid transparent;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 50px rgba(255, 107, 157, 0.4);
+            border-color: #ff6b9d;
+        }
+        
+        .video-thumbnail {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .video-thumbnail i {
+            font-size: 4rem;
+            color: rgba(255, 107, 157, 0.3);
+        }
+        
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 107, 157, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(255, 107, 157, 0.5);
+        }
+        
+        .video-card:hover .play-button {
+            background: #ff6b9d;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        
+        .video-info {
+            padding: 20px;
+        }
+        
+        .video-info h4 {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .video-info p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #999;
+        }
+        
+        /* 视频播放模态框 - 修复版 */
+        .video-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .video-modal-overlay.active {
+            display: flex !important;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .video-modal-content {
+            background: white;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 1000px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.4s ease;
+            position: relative;
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .video-modal-header {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ffe0e6;
+        }
+        
+        .video-modal-header h3 {
+            font-size: 1.5rem;
+            color: #ff6b9d;
+            font-weight: 700;
+        }
+        
+        .video-modal-close {
+            font-size: 2.5rem;
+            color: #ff6b9d;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #ffe0e6;
+            transition: all 0.3s;
+        }
+        
+        .video-modal-close:hover {
+            background: #ff6b9d;
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        .video-player {
+            width: 100%;
+            background: #000;
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 宽高比 */
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-player iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .video-details {
+            padding: 25px 30px;
+        }
+        
+        .video-details h3 {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        
+        .video-details p {
+            color: #666;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+        
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #ff6b9d, #ff4757);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+            margin-bottom: 20px;
+            font-family: inherit;
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 107, 157, 0.6);
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="brand">
+            <i class="fas fa-heartbeat"></i>
+            <span>健康生活助手</span>
+        </div>
+        <div class="nav-links">
+            <a href="main-final.html" class="nav-link">🏠 首页</a>
+            <a href="plan.html" class="nav-link">📋 计划</a>
+            <a href="habits.html" class="nav-link">✅ 打卡</a>
+            <a href="data.html" class="nav-link">📊 数据</a>
+            <a href="videos.html" class="nav-link active">🎬 视频</a>
+        </div>
+        <div class="user-info">
+            <span class="user-name" id="user-name">用户</span>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> 退出
+            </button>
+        </div>
+    </nav>
+    
+    <!-- 主内容 -->
+    <div class="main-content">
+        <a href="main-final.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> 返回首页
+        </a>
+        
+        <!-- 页面标题 -->
+        <div class="page-header">
+            <h1>🎬 健康视频 🌈</h1>
+            <p>观看专业健康视频，学习健康知识</p>
+            <p style="margin-top: 10px; font-size: 1rem; color: #999;">💡 点击视频卡片即可播放哦~</p>
+        </div>
+        
+        <!-- 视频分类 -->
+        <div class="video-categories">
+            <button class="category-btn active" onclick="filterVideos('all')">🌟 全部</button>
+            <button class="category-btn" onclick="filterVideos('sleep')">😴 睡眠改善</button>
+            <button class="category-btn" onclick="filterVideos('diet')">🍱 健康饮食</button>
+            <button class="category-btn" onclick="filterVideos('exercise')">🏃 运动健身</button>
+            <button class="category-btn" onclick="filterVideos('meditation')">🧘 冥想放松</button>
+        </div>
+        
+        <!-- 视频网格 -->
+        <div class="video-grid" id="video-grid">
+            <!-- 视频卡片会通过JavaScript动态生成 -->
+        </div>
+    </div>
+    
+    <!-- 视频播放模态框 - 修复版 -->
+    <div id="video-modal" class="video-modal-overlay">
+        <div class="video-modal-content">
+            <div class="video-modal-header">
+                <h3 id="video-title">视频标题</h3>
+                <span class="video-modal-close" onclick="closeVideoModal()">&times;</span>
+            </div>
+            <div class="video-player">
+                <iframe id="video-frame" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="video-details">
+                <h3 id="video-title-details">视频标题</h3>
+                <p id="video-description">视频描述</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ==================== 全局变量 ====================
+        let currentUser = null;
+        
+        // 视频数据 - 使用真实的YouTube视频ID
+        const videoData = [
+            {
+                id: 1,
+                title: '科学改善睡眠质量',
+                description: '本视频将教你如何通过科学方法改善睡眠质量，包括睡前准备、环境调整等方法。',
+                category: 'sleep',
+                duration: '10:25',
+                views: '12.5万',
+                videoId: '6o2bz5Rk0WY'
+            },
+            {
+                id: 2,
+                title: '健康饮食指南',
+                description: '学习如何搭配营养均衡的饮食，了解各种食物的营养价值。',
+                category: 'diet',
+                duration: '15:30',
+                views: '8.3万',
+                videoId: 'c_hO4NVPJGs'
+            },
+            {
+                id: 3,
+                title: '居家锻炼教程',
+                description: '适合初学者的居家锻炼教程，无需器械，在家就能完成。',
+                category: 'exercise',
+                duration: '20:15',
+                views: '15.7万',
+                videoId: 'MLlSGfeOzD8'
+            },
+            {
+                id: 4,
+                title: '冥想入门指南',
+                description: '学习基础的冥想技巧，帮助放松身心，改善睡眠质量。',
+                category: 'meditation',
+                duration: '12:40',
+                views: '6.2万',
+                videoId: 'O29eYHUgorQ'
+            },
+            {
+                id: 5,
+                title: '睡前放松拉伸',
+                description: '睡前做这些简单拉伸动作，帮助你更快入睡，提高睡眠质量。',
+                category: 'sleep',
+                duration: '8:35',
+                views: '9.8万',
+                videoId: 'g_tea1pd-zo'
+            },
+            {
+                id: 6,
+                title: '营养早餐搭配',
+                description: '学习如何搭配营养丰富的早餐，为一天提供充足能量。',
+                category: 'diet',
+                duration: '11:20',
+                views: '7.5万',
+                videoId: 'JMh8VwTpPjk'
+            }
+        ];
+        
+        // ==================== 初始化 ====================
+        window.addEventListener('load', function() {
+            const savedUser = localStorage.getItem('healthAppCurrentUser');
+            if (!savedUser) {
+                window.location.href = 'login-final.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(savedUser);
+            document.getElementById('user-name').textContent = currentUser.name;
+            
+            loadVideos();
+        });
+        
+        // ==================== 登录/登出 ====================
+        function logout() {
+            if (confirm('确定要退出登录吗？ 🤔')) {
+                localStorage.removeItem('healthAppCurrentUser');
+                window.location.href = 'login-final.html';
+            }
+        }
+        
+        // ==================== 视频加载 ====================
+        function loadVideos() {
+            const videoGrid = document.getElementById('video-grid');
+            if (!videoGrid) return;
+            
+            videoGrid.innerHTML = '';
+            
+            videoData.forEach(video => {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'video-card';
+                videoCard.setAttribute('data-category', video.category);
+                videoCard.onclick = () => playVideo(video);
+                
+                videoCard.innerHTML = `
+                    <div class="video-thumbnail">
+                        <i class="fas fa-video"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.85rem;">
+                            ${video.duration}
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h4>${video.title}</h4>
+                        <p>${video.description}</p>
+                        <div class="video-meta">
+                            <span><i class="fas fa-eye"></i> ${video.views}次观看</span>
+                            <span>${getCategoryName(video.category)}</span>
+                        </div>
+                    </div>
+                `;
+                
+                videoGrid.appendChild(videoCard);
+            });
+        }
+        
+        function getCategoryName(category) {
+            const names = {
+                sleep: '😴 睡眠改善',
+                diet: '🍱 健康饮食',
+                exercise: '🏃 运动健身',
+                meditation: '🧘 冥想放松'
+            };
+            return names[category] || category;
+        }
+        
+        // ==================== 视频筛选 ====================
+        function filterVideos(category) {
+            // 更新按钮样式
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 筛选视频
+            const videoCards = document.querySelectorAll('.video-card');
+            videoCards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // ==================== 视频播放（修复版）====================
+        function playVideo(video) {
+            const videoFrame = document.getElementById('video-frame');
+            const videoTitle = document.getElementById('video-title');
+            const videoTitleDetails = document.getElementById('video-title-details');
+            const videoDescription = document.getElementById('video-description');
+            const videoModal = document.getElementById('video-modal');
+            
+            if (videoFrame && videoTitle && videoDescription && videoModal) {
+                // 设置视频源
+                videoFrame.src = `https://www.youtube.com/embed/${video.videoId}?autoplay=1&rel=0`;
+                
+                // 设置视频标题和描述
+                videoTitle.textContent = video.title;
+                videoTitleDetails.textContent = video.title;
+                videoDescription.textContent = video.description;
+                
+                // 显示模态框
+                videoModal.classList.add('active');
+                
+                console.log('✅ 视频开始播放：' + video.title);
+            }
+        }
+        
+        function closeVideoModal() {
+            const videoModal = document.getElementById('video-modal');
+            const videoFrame = document.getElementById('video-frame');
+            
+            if (videoModal && videoFrame) {
+                // 隐藏模态框
+                videoModal.classList.remove('active');
+                
+                // 停止视频播放
+                videoFrame.src = '';
+                
+                console.log('✅ 视频已关闭');
+            }
+        }
+        
+        // ==================== 点击模态框背景关闭（修复版）====================
+        document.addEventListener('click', function(e) {
+            const videoModal = document.getElementById('video-modal');
+            if (e.target === videoModal) {
+                closeVideoModal();
+            }
+        });
+        
+        // ==================== ESC键关闭模态框 ====================
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeVideoModal();
+            }
+        });
+        
+        console.log('✅ 健康视频页面已加载！');
+        console.log('🎬 视频播放功能已修复！');
+        console.log('🌈 可爱风格已应用！');
+    </script>
+</body>
+</html>

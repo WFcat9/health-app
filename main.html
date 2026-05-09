@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>健康生活助手 - 主页面</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            color: #667eea;
+            font-weight: 700;
+        }
+        
+        .brand i {
+            font-size: 1.8rem;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-name {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .logout-btn {
+            padding: 8px 16px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #c82333;
+        }
+        
+        /* 主内容 */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .welcome {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .welcome h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .welcome p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        /* 功能卡片 */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card:nth-child(1) .feature-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .feature-card:nth-child(2) .feature-icon {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .feature-card:nth-child(3) .feature-icon {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .feature-card:nth-child(4) .feature-icon {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        .feature-card:nth-child(5) .feature-icon {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* 快速操作 */
+        .quick-actions {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .quick-actions h2 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .action-btn {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .action-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .action-btn i {
+            margin-right: 8px;
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .welcome h1 {
+                font-size: 1.8rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="brand">
+            <i class="fas fa-heartbeat"></i>
+            <span>健康生活助手</span>
+        </div>
+        <div class="user-info">
+            <span class="user-name" id="user-name">用户</span>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> 退出登录
+            </button>
+        </div>
+    </nav>
+    
+    <!-- 主内容 -->
+    <div class="main-content">
+        <!-- 欢迎横幅 -->
+        <div class="welcome">
+            <h1>欢迎回来，<span id="welcome-name">用户</span>！</h1>
+            <p id="current-date"></p>
+            <p style="margin-top: 15px; font-size: 1rem;">
+                <i class="fas fa-quote-left"></i> 
+                <span id="daily-quote">健康不是一切，但没有健康就没有一切。</span>
+            </p>
+        </div>
+        
+        <!-- 功能卡片 -->
+        <div class="features">
+            <div class="feature-card" onclick="location.href='plan.html'">
+                <div class="feature-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h3>健康康复计划</h3>
+                <p>科学的三阶段康复计划，帮助你循序渐进地改善健康状态。</p>
+            </div>
+            
+            <div class="feature-card" onclick="location.href='habits.html'">
+                <div class="feature-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3>习惯打卡</h3>
+                <p>每日健康习惯打卡，建立稳定的健康生活方式。</p>
+            </div>
+            
+            <div class="feature-card" onclick="location.href='data.html'">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>健康数据</h3>
+                <p>记录并跟踪你的睡眠、饮水等健康数据。</p>
+            </div>
+            
+            <div class="feature-card" onclick="location.href='videos.html'">
+                <div class="feature-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h3>健康视频</h3>
+                <p>观看专业健康视频，学习健康知识。</p>
+            </div>
+            
+            <div class="feature-card" onclick="showReminders()">
+                <div class="feature-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <h3>健康提醒</h3>
+                <p>设置并管理你的每日健康提醒。</p>
+            </div>
+        </div>
+        
+        <!-- 快速操作 -->
+        <div class="quick-actions">
+            <h2><i class="fas fa-bolt"></i> 快速操作</h2>
+            <div class="action-buttons">
+                <button class="action-btn" onclick="checkHabitQuick('sleep')">
+                    <i class="fas fa-moon"></i> 早睡打卡
+                </button>
+                <button class="action-btn" onclick="checkHabitQuick('wake')">
+                    <i class="fas fa-sun"></i> 早起打卡
+                </button>
+                <button class="action-btn" onclick="checkHabitQuick('exercise')">
+                    <i class="fas fa-running"></i> 锻炼打卡
+                </button>
+                <button class="action-btn" onclick="openWaterModal()">
+                    <i class="fas fa-tint"></i> 记录饮水
+                </button>
+                <button class="action-btn" onclick="openSleepModal()">
+                    <i class="fas fa-bed"></i> 记录睡眠
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 睡眠记录模态框 -->
+    <div id="sleep-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 30px; border-radius: 15px; max-width: 400px; width: 90%;">
+            <h2 style="margin-bottom: 20px;"><i class="fas fa-bed"></i> 记录睡眠</h2>
+            <form id="sleep-form">
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px;">入睡时间</label>
+                    <input type="time" id="sleep-time-input" style="width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px;" required>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px;">起床时间</label>
+                    <input type="time" id="wake-time-input" style="width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px;" required>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" style="flex: 1; padding: 12px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer;">保存</button>
+                    <button type="button" onclick="closeSleepModal()" style="flex: 1; padding: 12px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer;">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 饮水记录模态框 -->
+    <div id="water-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 30px; border-radius: 15px; max-width: 400px; width: 90%;">
+            <h2 style="margin-bottom: 20px;"><i class="fas fa-tint"></i> 记录饮水</h2>
+            <form id="water-form">
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px;">饮水量（杯）</label>
+                    <input type="number" id="water-amount" min="1" max="8" value="1" style="width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px;" required>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" style="flex: 1; padding: 12px; background: #17a2b8; color: white; border: none; border-radius: 8px; cursor: pointer;">保存</button>
+                    <button type="button" onclick="closeWaterModal()" style="flex: 1; padding: 12px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer;">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // ==================== 初始化 ====================
+        let currentUser = null;
+        let healthData = {
+            habits: {
+                sleep: { streak: 0, lastCheck: null },
+                wake: { streak: 0, lastCheck: null },
+                exercise: { streak: 0, lastCheck: null },
+                water: { streak: 0, lastCheck: null, todayIntake: 0 },
+                diet: { streak: 0, lastCheck: null }
+            },
+            sleepRecords: [],
+            waterRecords: []
+        };
+        
+        // 页面加载时检查登录状态
+        window.addEventListener('load', function() {
+            const savedUser = localStorage.getItem('healthAppCurrentUser');
+            if (!savedUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(savedUser);
+            document.getElementById('user-name').textContent = currentUser.name;
+            document.getElementById('welcome-name').textContent = currentUser.name;
+            
+            updateDate();
+            loadDailyQuote();
+            loadHealthData();
+        });
+        
+        // ==================== 登录/登出 ====================
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                localStorage.removeItem('healthAppCurrentUser');
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // ==================== 日期和名言 ====================
+        function updateDate() {
+            const dateElement = document.getElementById('current-date');
+            if (dateElement) {
+                const now = new Date();
+                const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+                dateElement.textContent = now.toLocaleDateString('zh-CN', options);
+            }
+        }
+        
+        function loadDailyQuote() {
+            const quotes = [
+                '健康不是一切，但没有健康就没有一切。',
+                '早睡早起使人健康、富有和聪明。',
+                '运动是一切生命的源泉。',
+                '改变习惯的过程虽然痛苦，但结果会是幸福的。'
+            ];
+            
+            const today = new Date().getDate();
+            const quote = quotes[today % quotes.length];
+            
+            const quoteElement = document.getElementById('daily-quote');
+            if (quoteElement) {
+                quoteElement.textContent = quote;
+            }
+        }
+        
+        // ==================== 健康数据管理 ====================
+        function loadHealthData() {
+            if (currentUser) {
+                const key = `healthAppData_${currentUser.id}`;
+                const savedData = localStorage.getItem(key);
+                if (savedData) {
+                    healthData = JSON.parse(savedData);
+                }
+            }
+        }
+        
+        function saveHealthData() {
+            if (currentUser) {
+                const key = `healthAppData_${currentUser.id}`;
+                localStorage.setItem(key, JSON.stringify(healthData));
+            }
+        }
+        
+        // ==================== 习惯打卡 ====================
+        function checkHabitQuick(habitType) {
+            const today = new Date().toDateString();
+            
+            if (healthData.habits[habitType].lastCheck === today) {
+                alert('今天已经打卡过了！');
+                return;
+            }
+            
+            // 更新连续天数
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toDateString();
+            
+            if (healthData.habits[habitType].lastCheck === yesterdayStr) {
+                healthData.habits[habitType].streak++;
+            } else {
+                healthData.habits[habitType].streak = 1;
+            }
+            
+            healthData.habits[habitType].lastCheck = today;
+            
+            saveHealthData();
+            alert(`${getHabitName(habitType)}打卡成功！\n连续打卡：${healthData.habits[habitType].streak}天`);
+        }
+        
+        function getHabitName(habitType) {
+            const names = {
+                sleep: '早睡习惯',
+                wake: '早起习惯',
+                exercise: '锻炼习惯',
+                water: '喝水习惯',
+                diet: '健康饮食习惯'
+            };
+            return names[habitType] || habitType;
+        }
+        
+        // ==================== 数据记录 ====================
+        function openSleepModal() {
+            document.getElementById('sleep-modal').style.display = 'flex';
+        }
+        
+        function closeSleepModal() {
+            document.getElementById('sleep-modal').style.display = 'none';
+        }
+        
+        function openWaterModal() {
+            document.getElementById('water-modal').style.display = 'flex';
+        }
+        
+        function closeWaterModal() {
+            document.getElementById('water-modal').style.display = 'none';
+        }
+        
+        // 睡眠表单提交
+        document.addEventListener('submit', function(e) {
+            if (e.target.id === 'sleep-form') {
+                e.preventDefault();
+                recordSleepData();
+            } else if (e.target.id === 'water-form') {
+                e.preventDefault();
+                recordWaterData();
+            }
+        });
+        
+        function recordSleepData() {
+            const sleepTime = document.getElementById('sleep-time-input').value;
+            const wakeTime = document.getElementById('wake-time-input').value;
+            
+            if (!sleepTime || !wakeTime) {
+                alert('请填写完整的时间！');
+                return;
+            }
+            
+            const record = {
+                date: new Date().toISOString().split('T')[0],
+                sleepTime: sleepTime,
+                wakeTime: wakeTime
+            };
+            
+            healthData.sleepRecords.push(record);
+            saveHealthData();
+            closeSleepModal();
+            
+            alert('睡眠记录成功！');
+        }
+        
+        function recordWaterData() {
+            const amount = parseInt(document.getElementById('water-amount').value);
+            
+            if (!amount || amount <= 0) {
+                alert('请输入有效的饮水量！');
+                return;
+            }
+            
+            healthData.habits.water.todayIntake += amount;
+            saveHealthData();
+            closeWaterModal();
+            
+            alert(`饮水记录成功！今日饮水量：${healthData.habits.water.todayIntake}杯`);
+        }
+        
+        // ==================== 提醒功能 ====================
+        function showReminders() {
+            const reminderText = `
+每日健康提醒设置：
+
+1. 早起提醒（8:00）
+   新的一天开始了！喝一杯温水，做5分钟伸展运动
+
+2. 午餐提醒（12:00）
+   健康午餐时间！注意减少重盐重油，多吃蔬菜
+
+3. 下午茶提醒（15:00）
+   下午茶时间！喝一杯茶或水，避免含糖饮料
+
+4. 运动提醒（17:00）
+   运动时间！散步15-30分钟，或做简单锻炼
+
+5. 睡前提醒（22:00）
+   准备睡觉！避免使用电子设备，喝一杯温牛奶
+
+提示：浏览器会每分钟检查一次，到达提醒时间会显示通知。
+            `;
+            
+            alert(reminderText);
+        }
+        
+        // 请求通知权限
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+        
+        console.log('健康生活助手主页面已加载！');
+    </script>
+</body>
+</html>

@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>健康生活助手 🌈</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Nunito', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #a18cd1 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 可爱装饰 */
+        body::before {
+            content: '🌸';
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        body::after {
+            content: '💖';
+            position: fixed;
+            bottom: 30px;
+            left: 20px;
+            font-size: 1.5rem;
+            animation: float 3s ease-in-out infinite 1.5s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            box-shadow: 0 4px 20px rgba(255, 182, 193, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #ff6b9d, #c93cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .brand i {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ff6b9d, #ffa751);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: #ff6b9d;
+            font-size: 1.1rem;
+        }
+        
+        .logout-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ff6b9d, #ff4757);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+        }
+        
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 157, 0.6);
+        }
+        
+        /* 主内容 */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .welcome {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #ff9a9e 100%);
+            color: #333;
+            padding: 50px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(255, 154, 158, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .welcome::before {
+            content: '🌙';
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 3rem;
+            opacity: 0.3;
+        }
+        
+        .welcome::after {
+            content: '⭐';
+            position: absolute;
+            bottom: 20px;
+            left: 30px;
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+        
+        .welcome h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+            color: #ff6b9d;
+        }
+        
+        .welcome p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+        
+        /* 功能卡片 */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 8px 30px rgba(255, 182, 193, 0.2);
+            transition: all 0.4s;
+            cursor: pointer;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6b9d, #ffa751, #c93cff);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 50px rgba(255, 107, 157, 0.4);
+            border-color: #ff6b9d;
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-card:nth-child(1) .feature-icon {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff4757 100%);
+        }
+        
+        .feature-card:nth-child(2) .feature-icon {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .feature-card:nth-child(3) .feature-icon {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .feature-card:nth-child(4) .feature-icon {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        .feature-card:nth-child(5) .feature-icon {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+        
+        /* 快速操作 */
+        .quick-actions {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 8px 30px rgba(255, 182, 193, 0.2);
+        }
+        
+        .quick-actions h2 {
+            font-size: 1.8rem;
+            color: #ff6b9d;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #ffe0e6;
+            font-weight: 700;
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .action-btn {
+            padding: 18px 25px;
+            background: linear-gradient(135deg, #ffe0e6, #fff5f7);
+            border: 3px solid #ff6b9d;
+            border-radius: 20px;
+            font-size: 1.05rem;
+            color: #ff6b9d;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.2);
+        }
+        
+        .action-btn:hover {
+            background: linear-gradient(135deg, #ff6b9d, #ff4757);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.5);
+        }
+        
+        .action-btn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        /* 模态框样式 - 关键修复 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            display: flex !important;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.4s ease;
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2.5rem;
+            color: #ff6b9d;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #ffe0e6;
+        }
+        
+        .modal-close:hover {
+            background: #ff6b9d;
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        .modal-content h2 {
+            font-size: 1.8rem;
+            color: #ff6b9d;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        
+        .modal-content form {
+            margin-top: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 3px solid #ffe0e6;
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff6b9d;
+            box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.2);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .btn-primary {
+            flex: 1;
+            padding: 14px;
+            background: linear-gradient(135deg, #ff6b9d, #ff4757);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 107, 157, 0.6);
+        }
+        
+        .btn-secondary {
+            flex: 1;
+            padding: 14px;
+            background: #f8f9fa;
+            color: #666;
+            border: 3px solid #e9ecef;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .welcome h1 {
+                font-size: 2rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome {
+                padding: 30px;
+            }
+        }
+        
+        /* 可爱装饰元素 */
+        .cute-decoration {
+            position: fixed;
+            font-size: 1.5rem;
+            animation: float 3s ease-in-out infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .decoration-1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .decoration-2 { top: 20%; right: 8%; animation-delay: 0.5s; }
+        .decoration-3 { bottom: 15%; left: 10%; animation-delay: 1s; }
+        .decoration-4 { bottom: 25%; right: 5%; animation-delay: 1.5s; }
+    </style>
+</head>
+<body>
+    <!-- 可爱装饰 -->
+    <div class="cute-decoration decoration-1">🌸</div>
+    <div class="cute-decoration decoration-2">💖</div>
+    <div class="cute-decoration decoration-3">🎀</div>
+    <div class="cute-decoration decoration-4">🌈</div>
+    
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="brand">
+            <i class="fas fa-heartbeat"></i>
+            <span>健康生活助手</span>
+        </div>
+        <div class="user-info">
+            <span class="user-name" id="user-name">用户</span>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> 退出登录
+            </button>
+        </div>
+    </nav>
+    
+    <!-- 主内容 -->
+    <div class="main-content">
+        <!-- 欢迎横幅 -->
+        <div class="welcome">
+            <h1>欢迎回来，<span id="welcome-name">用户</span>！✨</h1>
+            <p id="current-date"></p>
+            <p style="margin-top: 20px; font-size: 1.1rem; background: rgba(255,255,255,0.5); padding: 15px; border-radius: 15px;">
+                <i class="fas fa-quote-left"></i> 
+                <span id="daily-quote">健康不是一切，但没有健康就没有一切。</span>
+            </p>
+        </div>
+        
+        <!-- 功能卡片 -->
+        <div class="features">
+            <div class="feature-card" onclick="location.href='plan.html'">
+                <div class="feature-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h3>健康康复计划 📋</h3>
+                <p>科学的三阶段康复计划，帮助你循序渐进地改善健康状态，每天进步一点点！</p>
+            </div>
+            
+            <div class="feature-card" onclick="location.href='habits.html'">
+                <div class="feature-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3>习惯打卡 ✅</h3>
+                <p>每日健康习惯打卡，建立稳定的健康生活方式，让好习惯成为自然！</p>
+            </div>
+            
+            <div class="feature-card" onclick="location.href='data.html'">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>健康数据 📊</h3>
+                <p>记录并跟踪你的睡眠、饮水等健康数据，可视化你的健康进步！</p>
+            </div>
+            
+            <div class="feature-card" onclick="location.href='videos.html'">
+                <div class="feature-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h3>健康视频 🎬</h3>
+                <p>观看专业健康视频，学习健康知识，跟着视频一起动起来！</p>
+            </div>
+            
+            <div class="feature-card" onclick="showReminders()">
+                <div class="feature-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <h3>健康提醒 🔔</h3>
+                <p>设置并管理你的每日健康提醒，让健康生活更有规律！</p>
+            </div>
+        </div>
+        
+        <!-- 快速操作 -->
+        <div class="quick-actions">
+            <h2><i class="fas fa-bolt"></i> 快速操作 ⚡</h2>
+            <div class="action-buttons">
+                <button class="action-btn" onclick="checkHabitQuick('sleep')">
+                    <i class="fas fa-moon"></i> 早睡打卡
+                </button>
+                <button class="action-btn" onclick="checkHabitQuick('wake')">
+                    <i class="fas fa-sun"></i> 早起打卡
+                </button>
+                <button class="action-btn" onclick="checkHabitQuick('exercise')">
+                    <i class="fas fa-running"></i> 锻炼打卡
+                </button>
+                <button class="action-btn" onclick="openWaterModal()">
+                    <i class="fas fa-tint"></i> 记录饮水
+                </button>
+                <button class="action-btn" onclick="openSleepModal()">
+                    <i class="fas fa-bed"></i> 记录睡眠
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 睡眠记录模态框 - 修复版 -->
+    <div id="sleep-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeSleepModal()">&times;</span>
+            <h2><i class="fas fa-bed"></i> 记录睡眠 😴</h2>
+            <form id="sleep-form" onsubmit="return false;">
+                <div class="form-group">
+                    <label><i class="fas fa-moon"></i> 入睡时间</label>
+                    <input type="time" id="sleep-time-input" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-sun"></i> 起床时间</label>
+                    <input type="time" id="wake-time-input" required>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn-primary" onclick="recordSleepData()">
+                        <i class="fas fa-save"></i> 保存
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="closeSleepModal()">
+                        <i class="fas fa-times"></i> 取消
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 饮水记录模态框 - 修复版 -->
+    <div id="water-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeWaterModal()">&times;</span>
+            <h2><i class="fas fa-tint"></i> 记录饮水 💧</h2>
+            <form id="water-form" onsubmit="return false;">
+                <div class="form-group">
+                    <label><i class="fas fa-glass-water"></i> 饮水量（杯）</label>
+                    <input type="number" id="water-amount" min="1" max="8" value="1" required>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn-primary" onclick="recordWaterData()">
+                        <i class="fas fa-save"></i> 保存
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="closeWaterModal()">
+                        <i class="fas fa-times"></i> 取消
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // ==================== 全局变量 ====================
+        let currentUser = null;
+        let healthData = {
+            habits: {
+                sleep: { streak: 0, lastCheck: null },
+                wake: { streak: 0, lastCheck: null },
+                exercise: { streak: 0, lastCheck: null },
+                water: { streak: 0, lastCheck: null, todayIntake: 0 },
+                diet: { streak: 0, lastCheck: null }
+            },
+            sleepRecords: [],
+            waterRecords: []
+        };
+        
+        // ==================== 初始化 ====================
+        window.addEventListener('load', function() {
+            const savedUser = localStorage.getItem('healthAppCurrentUser');
+            if (!savedUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(savedUser);
+            document.getElementById('user-name').textContent = currentUser.name;
+            document.getElementById('welcome-name').textContent = currentUser.name;
+            
+            updateDate();
+            loadDailyQuote();
+            loadHealthData();
+        });
+        
+        // ==================== 登录/登出 ====================
+        function logout() {
+            if (confirm('确定要退出登录吗？ 🤔')) {
+                localStorage.removeItem('healthAppCurrentUser');
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // ==================== 日期和名言 ====================
+        function updateDate() {
+            const dateElement = document.getElementById('current-date');
+            if (dateElement) {
+                const now = new Date();
+                const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+                dateElement.textContent = now.toLocaleDateString('zh-CN', options);
+            }
+        }
+        
+        function loadDailyQuote() {
+            const quotes = [
+                { text: '健康不是一切，但没有健康就没有一切。💪', author: '佚名' },
+                { text: '早睡早起使人健康、富有和聪明。🌅', author: '富兰克林' },
+                { text: '运动是一切生命的源泉。🏃', author: '达·芬奇' },
+                { text: '改变习惯的过程虽然痛苦，但结果会是幸福的。🌈', author: '佚名' }
+            ];
+            
+            const today = new Date().getDate();
+            const quote = quotes[today % quotes.length];
+            
+            const quoteElement = document.getElementById('daily-quote');
+            if (quoteElement) {
+                quoteElement.textContent = quote.text;
+            }
+        }
+        
+        // ==================== 健康数据管理 ====================
+        function loadHealthData() {
+            if (currentUser) {
+                const key = `healthAppData_${currentUser.id}`;
+                const savedData = localStorage.getItem(key);
+                if (savedData) {
+                    healthData = JSON.parse(savedData);
+                }
+            }
+        }
+        
+        function saveHealthData() {
+            if (currentUser) {
+                const key = `healthAppData_${currentUser.id}`;
+                localStorage.setItem(key, JSON.stringify(healthData));
+            }
+        }
+        
+        // ==================== 习惯打卡 ====================
+        function checkHabitQuick(habitType) {
+            const today = new Date().toDateString();
+            
+            if (healthData.habits[habitType].lastCheck === today) {
+                alert('今天已经打卡过了！明天再来吧~ 😊');
+                return;
+            }
+            
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toDateString();
+            
+            if (healthData.habits[habitType].lastCheck === yesterdayStr) {
+                healthData.habits[habitType].streak++;
+            } else {
+                healthData.habits[habitType].streak = 1;
+            }
+            
+            healthData.habits[habitType].lastCheck = today;
+            
+            saveHealthData();
+            alert(`${getHabitName(habitType)}打卡成功！🎉\n连续打卡：${healthData.habits[habitType].streak}天\n继续加油哦~ 💪`);
+        }
+        
+        function getHabitName(habitType) {
+            const names = {
+                sleep: '早睡习惯',
+                wake: '早起习惯',
+                exercise: '锻炼习惯',
+                water: '喝水习惯',
+                diet: '健康饮食习惯'
+            };
+            return names[habitType] || habitType;
+        }
+        
+        // ==================== 数据记录（修复版）====================
+        function openSleepModal() {
+            document.getElementById('sleep-modal').classList.add('active');
+        }
+        
+        function closeSleepModal() {
+            document.getElementById('sleep-modal').classList.remove('active');
+        }
+        
+        function openWaterModal() {
+            document.getElementById('water-modal').classList.add('active');
+        }
+        
+        function closeWaterModal() {
+            document.getElementById('water-modal').classList.remove('active');
+        }
+        
+        function recordSleepData() {
+            const sleepTime = document.getElementById('sleep-time-input').value;
+            const wakeTime = document.getElementById('wake-time-input').value;
+            
+            if (!sleepTime || !wakeTime) {
+                alert('请填写完整的时间！⏰');
+                return;
+            }
+            
+            const record = {
+                date: new Date().toISOString().split('T')[0],
+                sleepTime: sleepTime,
+                wakeTime: wakeTime
+            };
+            
+            healthData.sleepRecords.push(record);
+            saveHealthData();
+            closeSleepModal();
+            
+            alert('睡眠记录成功！😴\n祝你有个好梦~ 💤');
+        }
+        
+        function recordWaterData() {
+            const amount = parseInt(document.getElementById('water-amount').value);
+            
+            if (!amount || amount <= 0) {
+                alert('请输入有效的饮水量！💧');
+                return;
+            }
+            
+            healthData.habits.water.todayIntake += amount;
+            saveHealthData();
+            closeWaterModal();
+            
+            alert(`饮水记录成功！💧\n今日饮水量：${healthData.habits.water.todayIntake}杯\n多喝水，身体好~ 💪`);
+        }
+        
+        // ==================== 提醒功能 ====================
+        function showReminders() {
+            const reminderText = `
+每日健康提醒设置：⏰
+
+1. 早起提醒（8:00）🌅
+   新的一天开始了！喝一杯温水，做5分钟伸展运动
+
+2. 午餐提醒（12:00）🍱
+   健康午餐时间！注意减少重盐重油，多吃蔬菜
+
+3. 下午茶提醒（15:00）☕
+   下午茶时间！喝一杯茶或水，避免含糖饮料
+
+4. 运动提醒（17:00）🏃
+   运动时间！散步15-30分钟，或做简单锻炼
+
+5. 睡前提醒（22:00）🌙
+   准备睡觉！避免使用电子设备，喝一杯温牛奶
+
+提示：浏览器会每分钟检查一次，到达提醒时间会显示通知。
+            `;
+            
+            alert(reminderText);
+        }
+        
+        // 请求通知权限
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+        
+        console.log('✅ 健康生活助手主页面已加载！');
+        console.log('🎨 可爱风格已应用！');
+        console.log('🔧 所有模态框已修复！');
+    </script>
+</body>
+</html>

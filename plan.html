@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>健康康复计划 - 健康生活助手 🌈</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Nunito', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #a18cd1 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            box-shadow: 0 4px 20px rgba(255, 182, 193, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #ff6b9d, #c93cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .brand i {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ff6b9d, #ffa751);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .nav-link {
+            padding: 8px 16px;
+            color: #666;
+            text-decoration: none;
+            border-radius: 15px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 107, 157, 0.1);
+            color: #ff6b9d;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: #ff6b9d;
+            font-size: 1.1rem;
+        }
+        
+        .logout-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ff6b9d, #ff4757);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+        }
+        
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 157, 0.6);
+        }
+        
+        /* 主内容 */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #ff9a9e 100%);
+            padding: 40px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(255, 154, 158, 0.3);
+            text-align: center;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #ff6b9d;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        /* 阶段卡片 */
+        .phase-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .phase-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 8px 30px rgba(255, 182, 193, 0.2);
+            transition: all 0.4s;
+            border-left: 5px solid #ff6b9d;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .phase-card::before {
+            content: '🌱';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+        
+        .phase-card:nth-child(2)::before {
+            content: '🌿';
+        }
+        
+        .phase-card:nth-child(3)::before {
+            content: '🌳';
+        }
+        
+        .phase-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 50px rgba(255, 107, 157, 0.4);
+        }
+        
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .phase-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff4757 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 5px 20px rgba(255, 107, 157, 0.4);
+        }
+        
+        .phase-title h3 {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        
+        .phase-title p {
+            color: #999;
+            font-size: 0.95rem;
+        }
+        
+        .phase-content ul {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+        
+        .phase-content ul li {
+            padding: 12px 0;
+            border-bottom: 2px dashed #ffe0e6;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .phase-content ul li i {
+            color: #4caf50;
+            margin-top: 4px;
+            flex-shrink: 0;
+            font-size: 1.1rem;
+        }
+        
+        .phase-content ul li span {
+            color: #555;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        
+        .phase-progress {
+            margin-top: 20px;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #666;
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: #ffe0e6;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b9d, #ffa751);
+            border-radius: 10px;
+            transition: width 0.8s ease;
+            position: relative;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.3) 0%,
+                rgba(255, 255, 255, 0.5) 50%,
+                rgba(255, 255, 255, 0.3) 100%
+            );
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #ff6b9d, #ff4757);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+            margin-bottom: 20px;
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 107, 157, 0.6);
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .phase-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="brand">
+            <i class="fas fa-heartbeat"></i>
+            <span>健康生活助手</span>
+        </div>
+        <div class="nav-links">
+            <a href="main-final.html" class="nav-link">🏠 首页</a>
+            <a href="plan.html" class="nav-link active">📋 计划</a>
+            <a href="habits.html" class="nav-link">✅ 打卡</a>
+            <a href="data.html" class="nav-link">📊 数据</a>
+            <a href="videos.html" class="nav-link">🎬 视频</a>
+        </div>
+        <div class="user-info">
+            <span class="user-name" id="user-name">用户</span>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> 退出
+            </button>
+        </div>
+    </nav>
+    
+    <!-- 主内容 -->
+    <div class="main-content">
+        <a href="main-final.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> 返回首页
+        </a>
+        
+        <!-- 页面标题 -->
+        <div class="page-header">
+            <h1>🌱 健康康复计划 🌈</h1>
+            <p>科学的三阶段康复计划，帮助你循序渐进地改善健康状态</p>
+            <p style="margin-top: 10px; font-size: 1rem; color: #999;">💡 每个阶段完成后，才能解锁下一阶段哦~</p>
+        </div>
+        
+        <!-- 阶段卡片 -->
+        <div class="phase-container">
+            <!-- 第一阶段 -->
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div class="phase-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="phase-title">
+                        <h3>第一阶段：规律作息 🌙</h3>
+                        <p>目标：建立稳定的睡眠节奏</p>
+                    </div>
+                </div>
+                <div class="phase-content">
+                    <ul>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>每天23:00前上床准备睡觉 🛏️</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>每天早上7:00-8:00之间起床 ☀️</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>睡前1小时不使用电子设备 📵</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>保持卧室安静、黑暗、凉爽 🌡️</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="phase-progress">
+                    <div class="progress-label">
+                        <span>完成进度</span>
+                        <span id="phase1-text">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="phase1-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 第二阶段 -->
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div class="phase-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="phase-title">
+                        <h3>第二阶段：均衡饮食 🍱</h3>
+                        <p>目标：培养健康饮食习惯</p>
+                    </div>
+                </div>
+                <div class="phase-content">
+                    <ul>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>每天喝够8杯水 💧</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>每餐吃足量蔬菜（至少一半餐盘） 🥗</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>减少加工食品和高糖饮料 🚫</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>规律三餐，不暴饮暴食 ⏰</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="phase-progress">
+                    <div class="progress-label">
+                        <span>完成进度</span>
+                        <span id="phase2-text">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="phase2-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 第三阶段 -->
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div class="phase-icon">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <div class="phase-title">
+                        <h3>第三阶段：适量运动 🏃</h3>
+                        <p>目标：增强体能和免疫力</p>
+                    </div>
+                </div>
+                <div class="phase-content">
+                    <ul>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>每周至少3次中等强度运动 💪</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>每次运动20-30分钟 ⏱️</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>运动类型：快走、慢跑、瑜伽等 🧘</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>运动后适当拉伸放松 🤸</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="phase-progress">
+                    <div class="progress-label">
+                        <span>完成进度</span>
+                        <span id="phase3-text">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="phase3-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ==================== 全局变量 ====================
+        let currentUser = null;
+        let healthData = {
+            habits: {
+                sleep: { streak: 0, lastCheck: null },
+                wake: { streak: 0, lastCheck: null },
+                exercise: { streak: 0, lastCheck: null },
+                water: { streak: 0, lastCheck: null, todayIntake: 0 },
+                diet: { streak: 0, lastCheck: null }
+            },
+            phaseProgress: {
+                phase1: 0,
+                phase2: 0,
+                phase3: 0
+            }
+        };
+        
+        // ==================== 初始化 ====================
+        window.addEventListener('load', function() {
+            const savedUser = localStorage.getItem('healthAppCurrentUser');
+            if (!savedUser) {
+                window.location.href = 'login-final.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(savedUser);
+            document.getElementById('user-name').textContent = currentUser.name;
+            
+            loadHealthData();
+            updatePhaseDisplay();
+        });
+        
+        // ==================== 登录/登出 ====================
+        function logout() {
+            if (confirm('确定要退出登录吗？ 🤔')) {
+                localStorage.removeItem('healthAppCurrentUser');
+                window.location.href = 'login-final.html';
+            }
+        }
+        
+        // ==================== 健康数据管理 ====================
+        function loadHealthData() {
+            if (currentUser) {
+                const key = `healthAppData_${currentUser.id}`;
+                const savedData = localStorage.getItem(key);
+                if (savedData) {
+                    const parsed = JSON.parse(savedData);
+                    healthData = { ...healthData, ...parsed };
+                }
+            }
+        }
+        
+        function saveHealthData() {
+            if (currentUser) {
+                const key = `healthAppData_${currentUser.id}`;
+                localStorage.setItem(key, JSON.stringify(healthData));
+            }
+        }
+        
+        // ==================== 阶段进度更新 ====================
+        function updatePhaseProgress() {
+            const habits = healthData.habits;
+            
+            // 第一阶段：规律作息
+            let phase1Score = 0;
+            if (habits.sleep.streak > 0) phase1Score += 33;
+            if (habits.wake.streak > 0) phase1Score += 33;
+            if (habits.sleep.lastCheck === new Date().toDateString()) {
+                phase1Score += 34;
+            }
+            healthData.phaseProgress.phase1 = Math.min(phase1Score, 100);
+            
+            // 第二阶段：均衡饮食
+            let phase2Score = 0;
+            if (habits.diet.streak > 0) phase2Score += 50;
+            if (habits.water.streak > 0) phase2Score += 50;
+            healthData.phaseProgress.phase2 = Math.min(phase2Score, 100);
+            
+            // 第三阶段：适量运动
+            let phase3Score = 0;
+            if (habits.exercise.streak > 0) phase3Score += 100;
+            healthData.phaseProgress.phase3 = Math.min(phase3Score, 100);
+            
+            saveHealthData();
+            updatePhaseDisplay();
+        }
+        
+        function updatePhaseDisplay() {
+            for (let i = 1; i <= 3; i++) {
+                const progressBar = document.getElementById(`phase${i}-progress`);
+                const progressText = document.getElementById(`phase${i}-text`);
+                if (progressBar && progressText) {
+                    const progress = healthData.phaseProgress[`phase${i}`];
+                    progressBar.style.width = `${progress}%`;
+                    progressText.textContent = `${progress}%`;
+                }
+            }
+        }
+        
+        // 页面加载时更新进度
+        setTimeout(() => {
+            updatePhaseProgress();
+        }, 500);
+        
+        console.log('✅ 健康计划页面已加载！');
+        console.log('🌈 可爱风格已应用！');
+    </script>
+</body>
+</html>

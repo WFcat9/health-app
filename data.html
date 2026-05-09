@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>健康数据 - 健康生活助手 🌈</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin:0;
+            padding:0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Nunito', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #a18cd1 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            box-shadow: 0 4px 20px rgba(255, 182, 193, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #ff6b9d, #c93cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .brand i {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ff6b9d, #ffa751);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .nav-link {
+            padding: 8px 16px;
+            color: #666;
+            text-decoration: none;
+            border-radius: 15px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 107, 157, 0.1);
+            color: #ff6b9d;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: #ff6b9d;
+            font-size: 1.1rem;
+        }
+        
+        .logout-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ff6b9d, #ff4757);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+        }
+        
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 157, 0.6);
+        }
+        
+        /* 主内容 */
+        .main-content {
+            max-width: 1200px;
+            margin:0 auto;
+            padding: 30px 20px;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #ff9a9e 100%);
+            padding: 40px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(255, 154, 158, 0.3);
+            text-align: center;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #ff6b9d;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        /* 数据卡片容器 */
+        .data-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .data-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 8px 30px rgba(255, 182, 193, 0.2);
+            transition: all 0.4s;
+            border-left: 5px solid #ff6b9d;
+        }
+        
+        .data-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(255, 107, 157, 0.4);
+        }
+        
+        .data-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #ffe0e6;
+        }
+        
+        .data-header i {
+            font-size: 1.8rem;
+            color: #ff6b9d;
+        }
+        
+        .data-header h3 {
+            font-size: 1.4rem;
+            color: #333;
+            font-weight: 700;
+        }
+        
+        .data-content {
+            margin-bottom: 25px;
+        }
+        
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 2px dashed #ffe0e6;
+        }
+        
+        .data-label {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        .data-value {
+            color: #333;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+        
+        /* 水杯可视化 */
+        .water-visualization {
+            position: relative;
+            width: 120px;
+            height: 180px;
+            margin: 20px auto;
+            background: #ffe0e6;
+            border-radius: 0 0 25px 25px;
+            overflow: hidden;
+            border: 4px solid #ff6b9d;
+            border-top: none;
+        }
+        
+        .water-fill {
+            position: absolute;
+            bottom:0;
+            left:0;
+            right:0;
+            background: linear-gradient(180deg, #17a2b8, #138496);
+            transition: height 0.8s ease;
+            border-radius: 0 0 21px 21px;
+        }
+        
+        .water-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #333;
+            font-weight: 700;
+            font-size: 1.3rem;
+            z-index: 10;
+        }
+        
+        /* 按钮 */
+        .data-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+            font-family: inherit;
+        }
+        
+        .data-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(79, 172, 254, 0.6);
+        }
+        
+        .data-btn i {
+            margin-right: 8px;
+        }
+        
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #ff6b9d, #ff4757);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+            margin-bottom: 20px;
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 107, 157, 0.6);
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .data-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="brand">
+            <i class="fas fa-heartbeat"></i>
+            <span>健康生活助手</span>
+        </div>
+        <div class="nav-links">
+            <a href="main-final.html" class="nav-link">🏠 首页</a>
+            <a href="plan.html" class="nav-link">📋 计划</a>
+            <a href="habits.html" class="nav-link">✅ 打卡</a>
+            <a href="data.html" class="nav-link active">📊 数据</a>
+            <a href="videos.html" class="nav-link">🎬 视频</a>
+        </div>
+        <div class="user-info">
+            <span class="user-name" id="user-name">用户</span>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> 退出
+            </button>
+        </div>
+    </nav>
+    
+    <!-- 主内容 -->
+    <div class="main-content">
+        <a href="main-final.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> 返回首页
+        </a>
+        
+        <!-- 页面标题 -->
+        <div class="page-header">
+            <h1>📊 健康数据 🌈</h1>
+            <p>记录并跟踪你的健康数据，可视化你的健康进步</p>
+            <p style="margin-top: 10px; font-size: 1rem; color: #999;">💡 定期记录数据，了解自己的健康状况~</p>
+        </div>
+        
+        <!-- 数据卡片容器 -->
+        <div class="data-container">
+            <!-- 睡眠数据 -->
+            <div class="data-card">
+                <div class="data-header">
+                    <i class="fas fa-moon"></i>
+                    <h3>睡眠数据 😴</h3>
+                </div>
+                <div class="data-content">
+                    <div class="data-item">
+                        <span class="data-label">最近入睡时间</span>
+                        <span class="data-value" id="sleep-time-display">--:--</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">睡眠时长</span>
+                        <span class="data-value" id="sleep-duration">0 小时</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">记录总数</span>
+                        <span class="data-value" id="sleep-records-count">0 条</span>
+                    </div>
+                </div>
+                <button class="data-btn" onclick="openSleepModal()">
+                    <i class="fas fa-bed"></i> 记录睡眠
+                </button>
+            </div>
+            
+            <!-- 饮水数据 -->
+            <div class="data-card">
+                <div class="data-header">
+                    <i class="fas fa-tint"></i>
+                    <h3>饮水数据 💧</h3>
+                </div>
+                <div class="data-content">
+                    <div class="data-item">
+                        <span class="data-label">今日饮水量</span>
+                        <span class="data-value" id="water-intake-display">0 杯</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">目标饮水量</span>
+                        <span class="data-value">8 杯</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">完成进度</span>
+                        <span class="data-value" id="water-percentage">0%</span>
+                    </div>
+                </div>
+                <div class="water-visualization">
+                    <div class="water-fill" id="water-fill" style="height: 0%"></div>
+                    <div class="water-text" id="water-text">0/8</div>
+                </div>
+                <button class="data-btn" style="margin-top: 20px;" onclick="openWaterModal()">
+                    <i class="fas fa-tint"></i> 记录饮水
+                </button>
+            </div>
+            
+            <!-- 习惯数据 -->
+            <div class="data-card">
+                <div class="data-header">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>习惯数据 📈</h3>
+                </div>
+                <div class="data-content" id="habits-data">
+                    <div class="data-item">
+                        <span class="data-label">😴 早睡习惯</span>
+                        <span class="data-value" id="sleep-streak">0 天</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">☀️ 早起习惯</span>
+                        <span class="data-value" id="wake-streak">0 天</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">🏃 锻炼习惯</span>
+                        <span class="data-value" id="exercise-streak">0 天</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">💧 喝水习惯</span>
+                        <span class="data-value" id="water-streak">0 天</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">🍎 饮食习惯</span>
+                        <span class="data-value" id="diet-streak">0 天</span>
+                    </div>
+                </div>
+                <button class="data-btn" onclick="location.href='habits.html'">
+                    <i class="fas fa-check-circle"></i> 去打卡
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 睡眠记录模态框 -->
+    <div id="sleep-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; justify-content: center; align-items: center;">
+        <div style="background: white; padding:40px; border-radius: 30px; max-width: 500px; width: 90%; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+            <span style="position: absolute; top: 15px; right: 20px; font-size: 2.5rem; color: #ff6b9d; cursor: pointer; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #ffe0e6; transition: all 0.3s;" onclick="closeSleepModal()" onmouseover="this.style.background='#ff6b9d'; this.style.color='white';" onmouseout="this.style.background='#ffe0e6'; this.style.color='#ff6b9d';">&times;</span>
+            <h2 style="font-size: 1.8rem; color: #ff6b9d; margin-bottom: 25px; font-weight: 700;"><i class="fas fa-bed"></i> 记录睡眠 😴</h2>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 600; font-size: 1.05rem;"><i class="fas fa-moon"></i> 入睡时间</label>
+                <input type="time" id="sleep-time-input" style="width: 100%; padding: 12px 15px; border: 3px solid #ffe0e6; border-radius: 15px; font-size: 1rem; transition: all 0.3s; font-family: inherit;" onfocus="this.style.borderColor='#ff6b9d'; this.style.boxShadow='0 0 0 4px rgba(255, 107, 157, 0.2)';" onblur="this.style.borderColor='#ffe0e6'; this.style.boxShadow='none';" required>
+            </div>
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 600; font-size: 1.05rem;"><i class="fas fa-sun"></i> 起床时间</label>
+                <input type="time" id="wake-time-input" style="width: 100%; padding: 12px 15px; border: 3px solid #ffe0e6; border-radius: 15px; font-size: 1rem; transition: all 0.3s; font-family: inherit;" onfocus="this.style.borderColor='#ff6b9d'; this.style.boxShadow='0 0 0 4px rgba(255, 107, 157, 0.2)';" onblur="this.style.borderColor='#ffe0e6'; this.style.boxShadow='none';" required>
+            </div>
+            <div style="display: flex; gap: 15px;">
+                <button style="flex: 1; padding: 14px; background: linear-gradient(135deg, #ff6b9d, #ff4757); color: white; border: none; border-radius: 15px; cursor: pointer; font-size: 1.1rem; font-weight: 700; transition: all 0.3s; box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4); font-family: inherit;" onclick="recordSleepData()" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 25px rgba(255, 107, 157, 0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(255, 107, 157, 0.4)';">
+                    <i class="fas fa-save"></i> 保存
+                </button>
+                <button style="flex: 1; padding: 14px; background: #f8f9fa; color: #666; border: 3px solid #e9ecef; border-radius: 15px; cursor: pointer; font-size: 1.1rem; font-weight: 700; transition: all 0.3s; font-family: inherit;" onclick="closeSleepModal()" onmouseover="this.style.background='#e9ecef'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#f8f9fa'; this.style.transform='translateY(0)';">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 饮水记录模态框 -->
+    <div id="water-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; justify-content: center; align-items: center;">
+        <div style="background: white; padding:40px; border-radius: 30px; max-width: 500px; width: 90%; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+            <span style="position: absolute; top: 15px; right: 20px; font-size: 2.5rem; color: #ff6b9d; cursor: pointer; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #ffe0e6; transition: all 0.3s;" onclick="closeWaterModal()" onmouseover="this.style.background='#ff6b9d'; this.style.color='white';" onmouseout="this.style.background='#ffe0e6'; this.style.color='#ff6b9d';">&times;</span>
+            <h2 style="font-size: 1.8rem; color: #ff6b9d; margin-bottom: 25px; font-weight: 700;"><i class="fas fa-tint"></i> 记录饮水 💧</h2>
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 600; font-size: 1.05rem;"><i class="fas fa-glass-water"></i> 饮水量（杯）</label>
+                <input type="number" id="water-amount" min="1" max="8" value="1" style="width: 100%; padding: 12px 15px; border: 3px solid #ffe0e6; border-radius: 15px; font-size: 1rem; transition: all 0.3s; font-family: inherit;" onfocus="this.style.borderColor='#ff6b9d'; this.style.boxShadow='0 0 0 4px rgba(255, 107, 157, 0.2)';" onblur="this.style.borderColor='#ffe0e6'; this.style.boxShadow='none';" required>
+            </div>
+            <div style="display: flex; gap: 15px;">
+                <button style="flex: 1; padding: 14px; background: linear-gradient(135deg, #ff6b9d, #ff4757); color: white; border: none; border-radius: 15px; cursor: pointer; font-size: 1.1rem; font-weight: 700; transition: all 0.3s; box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4); font-family: inherit;" onclick="recordWaterData()" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 25px rgba(255, 107, 157, 0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(255, 107, 157, 0.4)';">
+                    <i class="fas fa-save"></i> 保存
+                </button>
+                <button style="flex: 1; padding: 14px; background: #f8f9fa; color: #666; border: 3px solid #e9ecef; border-radius: 15px; cursor: pointer; font-size: 1.1rem; font-weight: 700; transition: all 0.3s; font-family: inherit;" onclick="closeWaterModal()" onmouseover="this.style.background='#e9ecef'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#f8f9fa'; this.style.transform='translateY(0)';">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ==================== 全局变量 ====================
+        let currentUser = null;
+        let healthData = {
+            habits: {
+                sleep: { streak: 0, lastCheck: null, checked: false },
+                wake: { streak: 0, lastCheck: null, checked: false },
+                exercise: { streak: 0, lastCheck: null, checked: false },
+                water: { streak: 0, lastCheck: null, todayIntake: 0, checked: false },
+                diet: { streak: 0, lastCheck: null, checked: false }
+            },
+            sleepRecords: [],
+            waterRecords: []
+        };
+        
+        // ==================== 初始化 ====================
+        window.addEventListener('load', function() {
+            const savedUser = localStorage.getItem('healthAppCurrentUser');
+            if (!savedUser) {
+                window.location.href = 'login-final.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(savedUser);
+            document.getElementById('user-name').textContent = currentUser.name;
+            
+            loadHealthData();
+            updateDisplay();
+        });
+        
+        // ==================== 登录/登出 ====================
+        function logout() {
+            if (confirm('确定要退出登录吗？ 🤔')) {
+                localStorage.removeItem('healthAppCurrentUser');
+                window.location.href = 'login-final.html';
+            }
+        }
+        
+        // ==================== 健康数据管理 ====================
+        function loadHealthData() {
+            if (currentUser) {
+                const key = `healthAppData_${currentUser.id}`;
+                const savedData = localStorage.getItem(key);
+                if (savedData) {
+                    const parsed = JSON.parse(savedData);
+                    healthData = { ...healthData, ...parsed };
+                }
+            }
+        }
+        
+        function saveHealthData() {
+            if (currentUser) {
+                const key = `healthAppData_${currentUser.id}`;
+                localStorage.setItem(key, JSON.stringify(healthData));
+            }
+        }
+        
+        // ==================== 显示更新 ====================
+        function updateDisplay() {
+            // 更新习惯连续天数
+            for (const habit in healthData.habits) {
+                const streakElement = document.getElementById(`${habit}-streak`);
+                if (streakElement) {
+                    streakElement.textContent = `${healthData.habits[habit].streak} 天`;
+                }
+            }
+            
+            // 更新饮水数据
+            const waterIntakeElement = document.getElementById('water-intake-display');
+            if (waterIntakeElement) {
+                waterIntakeElement.textContent = `${healthData.habits.water.todayIntake} 杯`;
+            }
+            
+            const waterPercentage = document.getElementById('water-percentage');
+            if (waterPercentage) {
+                const percentage = Math.round((healthData.habits.water.todayIntake / 8) * 100);
+                waterPercentage.textContent = `${percentage}%`;
+            }
+            
+            // 更新水杯可视化
+            const waterFillElement = document.getElementById('water-fill');
+            const waterTextElement = document.getElementById('water-text');
+            if (waterFillElement && waterTextElement) {
+                const percentage = (healthData.habits.water.todayIntake / 8) * 100;
+                waterFillElement.style.height = `${percentage}%`;
+                waterTextElement.textContent = `${healthData.habits.water.todayIntake}/8`;
+            }
+            
+            // 更新睡眠数据
+            if (healthData.sleepRecords.length > 0) {
+                const lastRecord = healthData.sleepRecords[healthData.sleepRecords.length - 1];
+                const sleepTimeElement = document.getElementById('sleep-time-display');
+                const sleepDurationElement = document.getElementById('sleep-duration');
+                const sleepRecordsCountElement = document.getElementById('sleep-records-count');
+                
+                if (sleepTimeElement) sleepTimeElement.textContent = lastRecord.sleepTime;
+                if (sleepDurationElement && lastRecord.duration) sleepDurationElement.textContent = `${lastRecord.duration} 小时`;
+                if (sleepRecordsCountElement) sleepRecordsCountElement.textContent = `${healthData.sleepRecords.length} 条`;
+            }
+        }
+        
+        // ==================== 数据记录 ====================
+        function openSleepModal() {
+            document.getElementById('sleep-modal').style.display = 'flex';
+        }
+        
+        function closeSleepModal() {
+            document.getElementById('sleep-modal').style.display = 'none';
+        }
+        
+        function openWaterModal() {
+            document.getElementById('water-modal').style.display = 'flex';
+        }
+        
+        function closeWaterModal() {
+            document.getElementById('water-modal').style.display = 'none';
+        }
+        
+        function recordSleepData() {
+            const sleepTime = document.getElementById('sleep-time-input').value;
+            const wakeTime = document.getElementById('wake-time-input').value;
+            
+            if (!sleepTime || !wakeTime) {
+                alert('请填写完整的时间！⏰');
+                return;
+            }
+            
+            // 计算睡眠时长
+            const sleepDateTime = new Date(`2000-01-01T${sleepTime}`);
+            let wakeDateTime = new Date(`2000-01-01T${wakeTime}`);
+            
+            if (wakeDateTime < sleepDateTime) {
+                wakeDateTime = new Date(`2000-01-02T${wakeTime}`);
+            }
+            
+            const duration = (wakeDateTime - sleepDateTime) / (1000 * 60 * 60);
+            
+            const record = {
+                date: new Date().toISOString().split('T')[0],
+                sleepTime: sleepTime,
+                wakeTime: wakeTime,
+                duration: duration.toFixed(1)
+            };
+            
+            healthData.sleepRecords.push(record);
+            saveHealthData();
+            closeSleepModal();
+            updateDisplay();
+            
+            alert(`睡眠记录成功！😴\n入睡时间：${sleepTime}\n起床时间：${wakeTime}\n睡眠时长：${duration.toFixed(1)}小时\n祝你有个好梦~ 💤`);
+        }
+        
+        function recordWaterData() {
+            const amount = parseInt(document.getElementById('water-amount').value);
+            
+            if (!amount || amount <= 0) {
+                alert('请输入有效的饮水量！💧');
+                return;
+            }
+            
+            healthData.habits.water.todayIntake += amount;
+            saveHealthData();
+            closeWaterModal();
+            updateDisplay();
+            
+            alert(`饮水记录成功！💧\n今日饮水量：${healthData.habits.water.todayIntake}杯\n多喝水，身体好~ 💪`);
+        }
+        
+        console.log('✅ 健康数据页面已加载！');
+        console.log('🌈 可爱风格已应用！');
+    </script>
+</body>
+</html>
